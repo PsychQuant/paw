@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
+import Hub
 import MLXLMCommon
-import MLXLLM
 
 struct PullCommand: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
@@ -17,8 +17,10 @@ struct PullCommand: AsyncParsableCommand {
         print("This may take a while for large models...")
 
         let modelConfig = ModelConfiguration(id: modelId)
+        let hub = HubApi()
 
-        let container = try await LLMModelFactory.shared.loadContainer(
+        let modelDirectory = try await downloadModel(
+            hub: hub,
             configuration: modelConfig
         ) { progress in
             let percent = Int(progress.fractionCompleted * 100)
@@ -29,7 +31,7 @@ struct PullCommand: AsyncParsableCommand {
         print()
         print("Model downloaded successfully.")
         print("  ID: \(modelId)")
-        print("  Path: \(await container.configuration.name)")
+        print("  Path: \(modelDirectory.path)")
         print()
         print("Start serving with:")
         print("  paw serve --model \(modelId)")
