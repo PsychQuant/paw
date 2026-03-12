@@ -39,8 +39,8 @@ struct ServeCommand: AsyncParsableCommand {
         print("   Port: \(port)")
         print("   VLM:  \(vlm)")
 
-        // Configure Vapor
-        var env = try Environment.detect()
+        // Configure Vapor — pass only "serve" to avoid Vapor parsing ArgumentParser flags
+        var env = try Environment.detect(arguments: ["serve"])
         try LoggingSystem.bootstrap(from: &env)
         let logger = Logger(label: "paw.server")
 
