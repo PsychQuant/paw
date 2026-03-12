@@ -49,6 +49,7 @@ struct ServeCommand: AsyncParsableCommand {
 
         app.http.server.configuration.hostname = host
         app.http.server.configuration.port = port
+        app.routes.defaultMaxBodySize = "50mb"
 
         // CORS
         let corsConfig = CORSMiddleware.Configuration(
